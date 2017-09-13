@@ -14,11 +14,10 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
  *
  * @package Bavix\Processors
  *
- * @property-read MessageFactory                $message
- * @property-read ServerRequestFactoryInterface $request
- * @property-read ResponseFactory               $response
- * @property-read StreamFactory                 $stream
- * @property-read UriFactory                    $uri
+ * @property ServerRequestFactoryInterface $request
+ * @property ResponseFactory               $response
+ * @property StreamFactory                 $stream
+ * @property UriFactory                    $uri
  */
 class Factory
 {
@@ -29,7 +28,6 @@ class Factory
      * @var array
      */
     protected $factories = [
-        'message'  => MessageFactory::class,
         'request'  => ServerRequestFactoryInterface::class,
         'response' => ResponseFactory::class,
         'stream'   => StreamFactory::class,
@@ -49,7 +47,7 @@ class Factory
 
     public function __set(string $name, string $value): self
     {
-        if (isset($this->factories[$name]))
+        if (!isset($this->factories[$name]))
         {
             throw new Path('Key `' . $name . '` not found');
         }

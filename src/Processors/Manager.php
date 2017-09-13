@@ -81,15 +81,12 @@ abstract class Manager implements Dispatcher
      */
     public function response(): ResponseInterface
     {
-        if ($this->dispatcher)
-        {
-            return $this->dispatcher->response();
-        }
-
         if (!$this->response)
         {
             $this->setResponse(
-                $this->factory->response->createResponse()
+                $this->dispatcher ?
+                    $this->dispatcher->response() :
+                    $this->factory->response->createResponse()
             );
         }
 
@@ -101,19 +98,15 @@ abstract class Manager implements Dispatcher
      */
     public function request(): ServerRequestInterface
     {
-
-        if ($this->dispatcher)
-        {
-            return $this->dispatcher->request();
-        }
-
         if (!$this->request)
         {
             $this->setRequest(
-                $this->factory->request->createServerRequest(
-                    filter_input(INPUT_SERVER, 'REQUEST_METHOD'),
-                    filter_input(INPUT_SERVER, 'REQUEST_URI')
-                )
+                $this->dispatcher ?
+                    $this->dispatcher->request() :
+                    $this->factory->request->createServerRequest(
+                        filter_input(INPUT_SERVER, 'REQUEST_METHOD'),
+                        filter_input(INPUT_SERVER, 'REQUEST_URI')
+                    )
             );
         }
 
@@ -133,6 +126,14 @@ abstract class Manager implements Dispatcher
             return $this->message->next();
         }
 
+        if (!is_object($this->message) || !($this->message instanceof ResponseInterface))
+        {
+            $stream   = $this->factory->stream->createStream($this->message);
+            $response = $this->response()->withBody($stream);
+
+            $this->setResponse($response);
+        }
+
         return (string)$this;
     }
 
@@ -141,7 +142,7 @@ abstract class Manager implements Dispatcher
      */
     public function handle()
     {
-        $action = $this->request->getAttribute($this->actionName);
+        $action = $this->request()->getAttribute($this->actionName);
 
         if ($action === null)
         {
@@ -149,6 +150,11 @@ abstract class Manager implements Dispatcher
         }
 
         $data = $this->$action(...$this->arguments());
+
+        if (is_object($data) && $data instanceof Dispatcher)
+        {
+            return $data;
+        }
 
         if (is_string($data) && class_exists($data))
         {
@@ -161,16 +167,16 @@ abstract class Manager implements Dispatcher
     /**
      * @param mixed $data
      *
-     * @return string
+     * @return mixed
      */
-    protected function processing($data): string
+    protected function processing($data)
     {
         if (\is_iterable($data))
         {
             $data = JSON::encode($data, $this->jsonOptions());
         }
 
-        return (string)$data;
+        return $data;
     }
 
     /**

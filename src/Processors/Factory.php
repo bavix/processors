@@ -21,6 +21,9 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
 class Factory
 {
 
+    /**
+     * @var array
+     */
     protected $map = [];
 
     /**
@@ -34,20 +37,23 @@ class Factory
     ];
 
     /**
-     * @param array|\Traversable $data
+     * Factory constructor.
      *
-     * @return self
+     * @param array|\Traversable $data
      */
-    public function update($data): self
+    public function __construct($data)
     {
         foreach ($data as $name => $value)
         {
             $this->{$name} = $value;
         }
-
-        return $this;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return mixed
+     */
     public function __get(string $name)
     {
         if (!isset($this->map[$name]))
@@ -59,6 +65,12 @@ class Factory
         return $this->map[$name];
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     *
+     * @return Factory
+     */
     public function __set(string $name, string $value): self
     {
         if (!isset($this->factories[$name]))
@@ -76,6 +88,11 @@ class Factory
         return $this;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
     public function __isset(string $name): bool
     {
         return isset($this->map[$name]);

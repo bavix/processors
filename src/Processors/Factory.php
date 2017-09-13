@@ -34,6 +34,21 @@ class Factory
         'uri'      => UriFactory::class,
     ];
 
+    /**
+     * @param array|\Traversable $data
+     *
+     * @return self
+     */
+    public function update($data): self
+    {
+        foreach ($data as $name => $value)
+        {
+            $this->{$name} = $value;
+        }
+
+        return $this;
+    }
+
     public function __get(string $name)
     {
         if (!isset($this->map[$name]))

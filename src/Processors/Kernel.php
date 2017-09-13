@@ -68,11 +68,11 @@ class Kernel
     }
 
     /**
-     * @param \Traversable $iterate
+     * @param array|\Traversable $iterate
      *
      * @return self
      */
-    public function setBundles(\Traversable $iterate): self
+    public function setBundles($iterate): self
     {
         foreach ($iterate as $name => $bundle)
         {

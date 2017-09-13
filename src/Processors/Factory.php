@@ -4,7 +4,6 @@ namespace Bavix\Processors;
 
 use Bavix\Exceptions\NotFound\Path;
 use Http\Message\MessageFactory;
-use Http\Message\ResponseFactory;
 use Http\Message\StreamFactory;
 use Http\Message\UriFactory;
 use Interop\Http\Factory\ServerRequestFactoryInterface;
@@ -15,7 +14,7 @@ use Interop\Http\Factory\ServerRequestFactoryInterface;
  * @package Bavix\Processors
  *
  * @property ServerRequestFactoryInterface $request
- * @property ResponseFactory               $response
+ * @property MessageFactory                $message
  * @property StreamFactory                 $stream
  * @property UriFactory                    $uri
  */
@@ -28,10 +27,10 @@ class Factory
      * @var array
      */
     protected $factories = [
-        'request'  => ServerRequestFactoryInterface::class,
-        'response' => ResponseFactory::class,
-        'stream'   => StreamFactory::class,
-        'uri'      => UriFactory::class,
+        'request' => ServerRequestFactoryInterface::class,
+        'message' => MessageFactory::class,
+        'stream'  => StreamFactory::class,
+        'uri'     => UriFactory::class,
     ];
 
     /**

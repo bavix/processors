@@ -1,0 +1,24 @@
+{
+  "name": "bavix/processors",
+  "description": "processors",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "REZ1DENT3",
+      "email": "info@babichev.net"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "psr/http-message": "^1.0",
+    "php-http/message-factory": "^1.0",
+    "http-interop/http-factory": "^0.3.0",
+    "bavix/helpers": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bavix\\": "src/"
+    }
+  }
+}

@@ -16,6 +16,9 @@
     "http-interop/http-factory": "^0.3.0",
     "bavix/helpers": "^1.0"
   },
+  "require-dev": {
+    "bavix/http": "dev-master"
+  },
   "autoload": {
     "psr-4": {
       "Bavix\\": "src/"

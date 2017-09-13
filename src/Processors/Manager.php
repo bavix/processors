@@ -86,7 +86,7 @@ abstract class Manager implements Dispatcher
             $this->setResponse(
                 $this->dispatcher ?
                     $this->dispatcher->response() :
-                    $this->factory->response->createResponse()
+                    $this->factory->message->createResponse()
             );
         }
 

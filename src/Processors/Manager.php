@@ -126,13 +126,15 @@ abstract class Manager implements Dispatcher
             return $this->message->next();
         }
 
-        if (!is_object($this->message) || !($this->message instanceof ResponseInterface))
-        {
-            $stream   = $this->factory->stream->createStream($this->message);
-            $response = $this->response()->withBody($stream);
+        $response = $this->message;
 
-            $this->setResponse($response);
+        if (!($response instanceof ResponseInterface))
+        {
+            $stream   = $this->factory->stream->createStream($response);
+            $response = $this->response()->withBody($stream);
         }
+
+        $this->setResponse($response);
 
         return (string)$this;
     }

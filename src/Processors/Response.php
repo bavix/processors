@@ -2,6 +2,7 @@
 
 namespace Bavix\Processors;
 
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,43 +15,46 @@ class Response
     protected $request;
 
     /**
-     * @var ResponseInterface
+     * @var MessageInterface
      */
-    protected $response;
+    protected $message;
 
     /**
      * Response constructor.
      *
      * @param ServerRequestInterface  $request
-     * @param ResponseInterface $response
+     * @param MessageInterface $response
      */
-    public function __construct(ServerRequestInterface $request, ResponseInterface $response)
+    public function __construct(ServerRequestInterface $request, MessageInterface $response)
     {
-        $this->request  = $request;
-        $this->response = $response;
+        $this->request = $request;
+        $this->message = $response;
     }
 
     protected function status(): void
     {
-        $code   = $this->response->getStatusCode();
-        $reason = $this->response->getReasonPhrase();
-
-        if (!empty($reason))
+        if ($this->message instanceof ResponseInterface)
         {
-            $version = $this->response->getProtocolVersion();
-            \header('HTTP/' . $version . ' ' . $code . ' ' . $reason);
-        }
+            $code   = $this->message->getStatusCode();
+            $reason = $this->message->getReasonPhrase();
 
-        \http_response_code($code);
+            if (!empty($reason))
+            {
+                $version = $this->message->getProtocolVersion();
+                \header('HTTP/' . $version . ' ' . $code . ' ' . $reason);
+            }
+
+            \http_response_code($code);
+        }
     }
 
     protected function headers(): void
     {
         \header_remove();
 
-        foreach ($this->response->getHeaders() as $name => $value)
+        foreach ($this->message->getHeaders() as $name => $value)
         {
-            \header($name . ': ' . $this->response->getHeaderLine($name));
+            \header($name . ': ' . $this->message->getHeaderLine($name));
         }
     }
 
@@ -62,7 +66,7 @@ class Response
         $this->headers();
         $this->status();
 
-        return (string)$this->response->getBody();
+        return (string)$this->message->getBody();
     }
 
 }

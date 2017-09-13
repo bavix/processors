@@ -62,8 +62,8 @@ $factory = new \Bavix\Processors\Factory([
 ]);
 
 $req     = $factory->request->createServerRequest(
-    filter_input(INPUT_SERVER, 'REQUEST_METHOD'),
-    filter_input(INPUT_SERVER, 'REQUEST_URI')
+    filter_input(INPUT_SERVER, 'REQUEST_METHOD') ?? 'GET',
+    filter_input(INPUT_SERVER, 'REQUEST_URI') ?? '/'
 );
 
 $kernel  = new Kernel($factory);

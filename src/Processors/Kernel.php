@@ -30,6 +30,16 @@ class Kernel
     protected $bundle;
 
     /**
+     * Kernel constructor.
+     *
+     * @param Factory $factory
+     */
+    public function __construct(Factory $factory)
+    {
+        $this->factory = $factory;
+    }
+
+    /**
      * @return string
      *
      * @throws Runtime
@@ -54,11 +64,6 @@ class Kernel
      */
     protected function factory(): Factory
     {
-        if (!$this->factory)
-        {
-            $this->factory = new Factory();
-        }
-
         return $this->factory;
     }
 

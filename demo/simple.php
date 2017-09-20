@@ -61,11 +61,11 @@ $factory = new \Bavix\Processors\Factory([
     'uri'     => \Bavix\Http\Factory\UriFactory::class,
 ]);
 
-$req     = $factory->request->createServerRequest(
+$req = $factory->request->createServerRequest(
     filter_input(INPUT_SERVER, 'REQUEST_METHOD') ?? 'GET',
     filter_input(INPUT_SERVER, 'REQUEST_URI') ?? '/'
 );
 
-$kernel  = new Kernel($factory);
+$kernel = new Kernel($factory);
 $kernel->pushBundle('app', P1::class);
 $kernel->terminate($req);

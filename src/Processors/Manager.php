@@ -175,6 +175,12 @@ abstract class Manager implements Dispatcher
     {
         if (\is_iterable($data))
         {
+            $this->response = $this->response()
+                ->withHeader('content-type', [
+                    'application/json',
+                    'charset=utf-8'
+                ]);
+
             $data = JSON::encode($data, $this->jsonOptions());
         }
 

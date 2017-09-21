@@ -14,7 +14,7 @@ abstract class Manager implements Dispatcher
     /**
      * @var string
      */
-    protected $actionName = 'action';
+    protected $attribute = 'action';
 
     /**
      * @var Dispatcher
@@ -145,11 +145,11 @@ abstract class Manager implements Dispatcher
      */
     public function handle()
     {
-        $action = $this->request()->getAttribute($this->actionName);
+        $action = $this->request()->getAttribute($this->attribute);
 
         if ($action === null)
         {
-            throw new Path('Action `' . $this->actionName . '` name not found!');
+            throw new Path('Action `' . $this->attribute . '` name not found!');
         }
 
         if (!method_exists($this, $action))

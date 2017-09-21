@@ -8,7 +8,7 @@ class P1 extends \Bavix\Processors\Manager
     public function next(): string
     {
         $this->request = $this->request()
-            ->withAttribute($this->actionName, 'default');
+            ->withAttribute($this->attribute, 'default');
 
         return parent::next();
     }
@@ -24,7 +24,7 @@ class P2 extends \Bavix\Processors\Manager
     public function next(): string
     {
         $this->request = $this->request()
-            ->withAttribute($this->actionName, 'test');
+            ->withAttribute($this->attribute, 'test');
 
         return parent::next();
     }

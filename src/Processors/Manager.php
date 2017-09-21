@@ -2,6 +2,7 @@
 
 namespace Bavix\Processors;
 
+use Bavix\Exceptions\Runtime;
 use Bavix\Helpers\JSON;
 use Bavix\Exceptions\NotFound\Path;
 use Psr\Http\Message\ResponseInterface;
@@ -149,6 +150,11 @@ abstract class Manager implements Dispatcher
         if ($action === null)
         {
             throw new Path('Action `' . $this->actionName . '` name not found!');
+        }
+
+        if (!method_exists($this, $action))
+        {
+            throw new Runtime('Action `' . $action . '` not found');
         }
 
         $data = $this->$action(...$this->arguments());

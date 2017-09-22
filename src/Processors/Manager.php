@@ -2,6 +2,7 @@
 
 namespace Bavix\Processors;
 
+use Bavix\Context\Cookies;
 use Bavix\Exceptions\Runtime;
 use Bavix\Helpers\JSON;
 use Bavix\Exceptions\NotFound\Path;
@@ -20,6 +21,11 @@ abstract class Manager implements Dispatcher
      * @var Dispatcher
      */
     protected $dispatcher;
+
+    /**
+     * @var Cookies
+     */
+    protected $cookies;
 
     /**
      * @var Factory
@@ -46,11 +52,13 @@ abstract class Manager implements Dispatcher
      *
      * @param Factory         $factory
      * @param Dispatcher|null $dispatcher
+     * @param Cookies|null    $cookies
      */
-    public function __construct(Factory $factory, Dispatcher $dispatcher = null)
+    public function __construct(Factory $factory, Dispatcher $dispatcher = null, Cookies $cookies = null)
     {
         $this->factory    = $factory;
         $this->dispatcher = $dispatcher;
+        $this->cookies    = $cookies;
     }
 
     /**
@@ -166,7 +174,7 @@ abstract class Manager implements Dispatcher
 
         if (is_string($data) && class_exists($data))
         {
-            return new $data($this->factory, $this);
+            return new $data($this->factory, $this, $this->cookies);
         }
 
         return $this->processing($data);
@@ -214,7 +222,7 @@ abstract class Manager implements Dispatcher
      */
     public function __toString(): string
     {
-        return (string)new Response($this->request(), $this->response());
+        return (string)new Response($this->request(), $this->response(), $this->cookies);
     }
 
 }

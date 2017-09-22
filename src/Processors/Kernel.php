@@ -2,6 +2,7 @@
 
 namespace Bavix\Processors;
 
+use Bavix\Context\Cookies;
 use Bavix\Exceptions\Invalid;
 use Bavix\Exceptions\Runtime;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,6 +26,11 @@ class Kernel
     protected $factory;
 
     /**
+     * @var Cookies
+     */
+    protected $cookies;
+
+    /**
      * @var string
      */
     protected $bundle;
@@ -33,10 +39,12 @@ class Kernel
      * Kernel constructor.
      *
      * @param Factory $factory
+     * @param Cookies $cookies
      */
-    public function __construct(Factory $factory)
+    public function __construct(Factory $factory, Cookies $cookies = null)
     {
         $this->factory = $factory;
+        $this->cookies = $cookies;
     }
 
     /**
@@ -122,7 +130,7 @@ class Kernel
         /**
          * @var Manager $manager
          */
-        $manager = new $class($this->factory());
+        $manager = new $class($this->factory(), null, $this->cookies);
         $manager->setRequest($request);
 
         die($manager->next());

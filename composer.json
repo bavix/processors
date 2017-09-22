@@ -17,7 +17,7 @@
     "bavix/content": "^1.0"
   },
   "require-dev": {
-    "bavix/http": "dev-master"
+    "bavix/http": "^0.0"
   },
   "autoload": {
     "psr-4": {

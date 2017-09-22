@@ -29,13 +29,13 @@ class Response
      * Response constructor.
      *
      * @param ServerRequestInterface  $request
-     * @param MessageInterface $response
+     * @param MessageInterface $message
      * @param Cookies $cookies
      */
-    public function __construct(ServerRequestInterface $request, MessageInterface $response, Cookies $cookies = null)
+    public function __construct(ServerRequestInterface $request, MessageInterface $message, Cookies $cookies = null)
     {
         $this->request = $request;
-        $this->message = $response;
+        $this->message = $message;
         $this->cookies = $cookies;
     }
 
@@ -87,8 +87,8 @@ class Response
      */
     public function __toString(): string
     {
-        $this->cookies();
         $this->headers();
+        $this->cookies();
         $this->status();
 
         return (string)$this->message->getBody();

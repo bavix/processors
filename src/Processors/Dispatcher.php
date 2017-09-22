@@ -2,7 +2,7 @@
 
 namespace Bavix\Processors;
 
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface Dispatcher
@@ -17,11 +17,11 @@ interface Dispatcher
     public function __construct(Factory $factory, self $dispatcher = null);
 
     /**
-     * @param ResponseInterface $response
+     * @param MessageInterface $message
      *
      * @return self
      */
-    public function setResponse(ResponseInterface $response): self;
+    public function setMessage(MessageInterface $message): self;
 
     /**
      * @param ServerRequestInterface $request
@@ -31,9 +31,9 @@ interface Dispatcher
     public function setRequest(ServerRequestInterface $request): self;
 
     /**
-     * @return ResponseInterface
+     * @return MessageInterface
      */
-    public function response(): ResponseInterface;
+    public function message(): MessageInterface;
 
     /**
      * @return ServerRequestInterface

@@ -6,6 +6,7 @@ use Bavix\Context\Cookies;
 use Bavix\Exceptions\Runtime;
 use Bavix\Helpers\JSON;
 use Bavix\Exceptions\NotFound\Path;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -38,7 +39,7 @@ abstract class Manager implements Dispatcher
     protected $request;
 
     /**
-     * @var ResponseInterface
+     * @var MessageInterface
      */
     protected $response;
 
@@ -62,13 +63,13 @@ abstract class Manager implements Dispatcher
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param MessageInterface $message
      *
      * @return Dispatcher
      */
-    public function setResponse(ResponseInterface $response): Dispatcher
+    public function setMessage(MessageInterface $message): Dispatcher
     {
-        $this->response = $response;
+        $this->response = $message;
 
         return $this;
     }
@@ -86,15 +87,15 @@ abstract class Manager implements Dispatcher
     }
 
     /**
-     * @return ResponseInterface
+     * @return MessageInterface
      */
-    public function response(): ResponseInterface
+    public function message(): MessageInterface
     {
         if (!$this->response)
         {
-            $this->setResponse(
+            $this->setMessage(
                 $this->dispatcher ?
-                    $this->dispatcher->response() :
+                    $this->dispatcher->message() :
                     $this->factory->message->createResponse()
             );
         }
@@ -140,10 +141,10 @@ abstract class Manager implements Dispatcher
         if (!($response instanceof ResponseInterface))
         {
             $stream   = $this->factory->stream->createStream($response);
-            $response = $this->response()->withBody($stream);
+            $response = $this->message()->withBody($stream);
         }
 
-        $this->setResponse($response);
+        $this->setMessage($response);
 
         return (string)$this;
     }
@@ -189,7 +190,7 @@ abstract class Manager implements Dispatcher
     {
         if (\is_iterable($data))
         {
-            $this->response = $this->response()
+            $this->response = $this->message()
                 ->withHeader('content-type', [
                     'application/json',
                     'charset=utf-8'
@@ -222,7 +223,7 @@ abstract class Manager implements Dispatcher
      */
     public function __toString(): string
     {
-        return (string)new Response($this->request(), $this->response(), $this->cookies);
+        return (string)new Response($this->request(), $this->message(), $this->cookies);
     }
 
 }

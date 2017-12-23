@@ -61,8 +61,10 @@ interface Dispatcher
     public function __toString(): string;
 
     /**
+     * @param string $action
+     * 
      * @return string
      */
-    public function next(): string;
+    public function next(string $action = null): string;
 
 }

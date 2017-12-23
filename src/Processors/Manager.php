@@ -7,7 +7,6 @@ use Bavix\Exceptions\Runtime;
 use Bavix\Helpers\JSON;
 use Bavix\Exceptions\NotFound\Path;
 use Psr\Http\Message\MessageInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 abstract class Manager implements Dispatcher
@@ -125,11 +124,13 @@ abstract class Manager implements Dispatcher
 
 
     /**
+     * @param string $action
+     * 
      * @return string
      */
-    public function next(): string
+    public function next(string $action = null): string
     {
-        $this->message = $this->handle();
+        $this->message = $this->handle($action);
 
         if ($this->message instanceof Dispatcher)
         {
@@ -150,11 +151,16 @@ abstract class Manager implements Dispatcher
     }
 
     /**
+     * @param string $action
+     * 
      * @return mixed
      */
-    public function handle()
+    public function handle(string $action = null)
     {
-        $action = $this->request()->getAttribute($this->attribute);
+        if (!$action)
+        {
+            $action = $this->request()->getAttribute($this->attribute);
+        }
 
         if ($action === null)
         {
